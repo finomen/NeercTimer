@@ -65,6 +65,10 @@ public class Pcms2 {
 		this.login = login;
 		this.password = password;
 		new Thread(new Worker()).start();
+		time = new Watch<Long>();
+		startTime = new Watch<Long>();
+		length = new Watch<Long>();
+		status = new Watch<Integer>();
 	}
 	
 	public void hookTimeChange(Callback<Long> c) {

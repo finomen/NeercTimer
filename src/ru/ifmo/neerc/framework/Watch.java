@@ -1,5 +1,6 @@
 package ru.ifmo.neerc.framework;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -7,6 +8,12 @@ public class Watch<Type> {
 	Set<Callback<Type>> listeners;
 	AtomicReference<Type> value;
 
+	public Watch() {
+		value = new AtomicReference<Type>();
+		value.set(null);
+		listeners = new HashSet<Callback<Type>>();
+	}
+	
 	public Type get() {
 		return value.get();
 	}
