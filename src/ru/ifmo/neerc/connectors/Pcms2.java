@@ -1,12 +1,14 @@
 package ru.ifmo.neerc.connectors;
 
 import java.net.MalformedURLException;
-import com.caucho.hessian.client.HessianProxyFactory;
 
 import pcms2.services.client.AuthorizationFailedException;
 import pcms2.services.client.LoginData;
 import pcms2.services.client.LoginDataService;
 import pcms2.services.site.Clock;
+
+import com.caucho.hessian.client.HessianProxyFactory;
+
 import ru.ifmo.neerc.framework.Callback;
 import ru.ifmo.neerc.framework.Watch;
 
@@ -30,7 +32,6 @@ public class Pcms2 {
 					LoginDataService ldsvc = (LoginDataService) factory.create(
 							LoginDataService.class, url);
 					LoginData ld = ldsvc.getLoginData(login, password);
-					System.out.println("Sync " + ld);
 					if (ld != null) {
 						Clock clock = ld.getClock();
 	

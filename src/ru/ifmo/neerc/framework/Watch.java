@@ -21,7 +21,7 @@ public class Watch<Type> {
 	public void set(Type v) {
 		while (true) {
 			Type old = value.get();
-			if (old.equals(v)) {
+			if ((old == null && v == null) || (old != null && old.equals(v))) {
 				return;
 			}
 
