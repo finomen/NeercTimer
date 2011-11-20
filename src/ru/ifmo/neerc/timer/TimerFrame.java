@@ -87,7 +87,7 @@ public class TimerFrame extends JFrame {
 					long dtime = 0;
 					synchronized (cDelta) {
 						synchronized (cTime) {
-							long correction = Math.min(cDelta, diff);
+							long correction = Math.min(cDelta, diff / 2);
 							synchronized (status) {
 								if (status == Clock.RUNNING) {
 									cTime = cTime - diff + correction;
