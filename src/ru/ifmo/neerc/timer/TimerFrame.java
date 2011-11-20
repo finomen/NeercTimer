@@ -87,7 +87,7 @@ public class TimerFrame extends JFrame {
 					long dtime = 0;
 					synchronized (cDelta) {
 						synchronized (cTime) {
-							long correction = Math.min(cDelta, diff / 5);
+							long correction = Math.min(cDelta, diff);
 							synchronized (status) {
 								if (status == Clock.RUNNING) {
 									cTime = cTime - diff + correction;
@@ -143,6 +143,12 @@ public class TimerFrame extends JFrame {
 					
 					timeLabel.setText(text);
 					timeLabel.setForeground(c);
+					
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+							return;
+					}
 				}
 
 			}
@@ -162,7 +168,7 @@ public class TimerFrame extends JFrame {
 		synchronized (this.cDelta) {
 			synchronized (this.cTime) {
 				cDelta = time - this.cTime;
-				if (cDelta >= 10000) {
+				if (cDelta >= 100000) {
 					cDelta = Long.valueOf(0);
 					this.cTime = time;
 				}
