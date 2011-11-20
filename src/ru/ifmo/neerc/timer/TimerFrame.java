@@ -59,7 +59,15 @@ public class TimerFrame extends JFrame {
 		cTime = Long.valueOf(0);
 		cDelta = Long.valueOf(0);
 		status = Integer.valueOf(0);
-		setVisible(true);
+		
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				TimerFrame.this.setVisible(true);
+				
+			}
+			
+		}).start();
 		
 		new Thread(new Runnable() {
 			@SuppressWarnings("deprecation")
