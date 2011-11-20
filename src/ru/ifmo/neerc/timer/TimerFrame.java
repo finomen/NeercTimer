@@ -12,8 +12,10 @@ import javax.sql.rowset.spi.SyncResolver;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import ru.ifmo.neerc.gui.ImagePanel;
+
 import pcms2.services.site.Clock;
+import ru.ifmo.neerc.gui.ImagePanel;
+
 
 public class TimerFrame extends JFrame {
 	public static final int BEFORE = 0;

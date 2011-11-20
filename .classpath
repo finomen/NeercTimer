@@ -2,7 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="/usr/share/hessian-3.0.8/lib/hessian.jar"/>
 	<classpathentry kind="lib" path="/usr/share/caucho-services-3.0/lib/caucho-services.jar"/>
+	<classpathentry kind="lib" path="/usr/share/hessian-3.0.8/lib/hessian.jar"/>
+	<classpathentry kind="lib" path="/home/finomen/neerc/client/pcms2-client.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
