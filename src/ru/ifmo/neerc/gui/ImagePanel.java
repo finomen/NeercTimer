@@ -16,12 +16,14 @@ public class ImagePanel extends JPanel {
 	}
 	
 	public void setBackground(Image background) {
-		this.background = background;
+		synchronized (this) {
+			this.background = background;
+		}
 	}
 
 	public void paintComponent(Graphics g) {
 		Image img = null;
-		synchronized (background) {
+		synchronized (this) {
 			img = background;
 		}
 		
