@@ -77,25 +77,37 @@ public class TimerFrame extends JFrame {
 		}).start();
 		
 		new Thread(new Runnable() {
-			@SuppressWarnings("deprecation")
 			@Override
 			public void run() {
-				long timestamp = Calendar.getInstance().getTime().getTime();
+				long timestamp = System.currentTimeMillis();
 				while (true) {
-					long nts = Calendar.getInstance().getTime().getTime();
+					long nts = System.currentTimeMillis();
 					long diff = nts - timestamp;
 					timestamp = nts;
 					long dtime = 0;
 					synchronized (cDelta) {
 						synchronized (cTime) {
-							long correction = Math.min(cDelta, diff / 4);
-							cTime = cTime - diff + correction;
+							long correction = Math.min(cDelta, diff / 5);
+							synchronized (status) {
+								if (status == Clock.RUNNING) {
+									cTime = cTime - diff + correction;
+								}
+							}
+							
 							cDelta = cDelta - correction;
 							dtime = cTime;
 						}
 					}
 					
-					Date cd = new Date(dtime);
+					dtime /= 1000;
+					int seconds = (int) (dtime % 60);
+					dtime /= 60;
+					int minutes = (int) (dtime % 60);
+					dtime /= 60;
+					int hours = (int) dtime;
+					
+					
+					
 					String text = null;
 					Color c = null;
 					synchronized (status) {
@@ -115,19 +127,18 @@ public class TimerFrame extends JFrame {
 						}
 					}
 					
-					if (cd.getMinutes() <= 1) {
+					if (minutes <= 1) {
 						c = palette[LEFT1MIN];
-					} else if (cd.getMinutes() <= 5) {
+					} else if (minutes <= 5) {
 						c = palette[LEFT5MIN];
 					}
 					
-					if (cd.getHours() > 0) {
-						text = String.format("%d:%02d:%02d", cd.getHours(), cd.getMinutes(), cd.getSeconds());
-					} else if (cd.getMinutes() > 0) {
-						 
-						text = String.format("%02d:%02d", cd.getMinutes(), cd.getSeconds());
+					if (hours > 0) {
+						text = String.format("%d:%02d:%02d", hours, minutes, seconds);
+					} else if (minutes > 0) {						 
+						text = String.format("%02d:%02d", minutes, seconds);
 					} else {
-						text = String.format("%d", cd.getSeconds());
+						text = String.format("%d", seconds);
 					}
 					
 					timeLabel.setText(text);
@@ -151,7 +162,7 @@ public class TimerFrame extends JFrame {
 		synchronized (this.cDelta) {
 			synchronized (this.cTime) {
 				cDelta = time - this.cTime;
-				if (cDelta >= 3000) {
+				if (cDelta >= 10000) {
 					cDelta = Long.valueOf(0);
 					this.cTime = time;
 				}
