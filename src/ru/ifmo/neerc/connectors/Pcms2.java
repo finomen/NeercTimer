@@ -5,10 +5,10 @@ import com.caucho.hessian.client.HessianProxyFactory;
 
 import ru.ifmo.neerc.framework.Callback;
 import ru.ifmo.neerc.framework.Watch;
-import ru.ifmo.neerc.pcms2.services.client.AuthorizationFailedException;
-import ru.ifmo.neerc.pcms2.services.client.LoginData;
-import ru.ifmo.neerc.pcms2.services.client.LoginDataService;
-import ru.ifmo.neerc.pcms2.services.site.Clock;
+import pcms2.services.client.AuthorizationFailedException;
+import pcms2.services.client.LoginData;
+import pcms2.services.client.LoginDataService;
+import pcms2.services.site.Clock;
 
 public class Pcms2 {
 	private final int updateInterval;
@@ -23,18 +23,19 @@ public class Pcms2 {
 		public void run() {
 			HessianProxyFactory factory = new HessianProxyFactory();
 			while (true) {
-
 				try {
 					LoginDataService ldsvc = (LoginDataService) factory.create(
 							LoginDataService.class, url);
 					LoginData ld = ldsvc.getLoginData(login, password);
-					Clock clock = ld.getClock();
-
-					time.set(clock.getTime());
-					length.set(clock.getLength());
-					startTime.set(clock.getStartTime());
-					status.set(clock.getStatus());
-
+					System.out.println("Sync " + ld);
+					if (ld != null) {
+						Clock clock = ld.getClock();
+	
+						time.set(clock.getTime());
+						length.set(clock.getLength());
+						startTime.set(clock.getStartTime());
+						status.set(clock.getStatus());
+					}
 				} catch (MalformedURLException e) {
 					e.printStackTrace();
 				} catch (AuthorizationFailedException e) {
@@ -56,7 +57,7 @@ public class Pcms2 {
 	}
 	
 	public Pcms2(String host, String login, String password) {
-		this(host, login, password, 5000);
+		this(host, login, password, 1000);
 	}
 	
 	public Pcms2(String host, String login, String password, int updateInterval) {

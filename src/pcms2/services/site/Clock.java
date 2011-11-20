@@ -1,4 +1,4 @@
-package ru.ifmo.neerc.pcms2.services.site;
+package pcms2.services.site;
 
 public interface Clock
 {

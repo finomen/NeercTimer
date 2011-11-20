@@ -1,6 +1,6 @@
-package ru.ifmo.neerc.pcms2.services.client;
+package pcms2.services.client;
 
-import ru.ifmo.neerc.pcms2.services.site.Clock;
+import pcms2.services.site.Clock;
 
 public interface LoginData {
 	public abstract String getSite();

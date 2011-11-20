@@ -1,6 +1,6 @@
-package ru.ifmo.neerc.pcms2.services.client;
+package pcms2.services.client;
 
-import ru.ifmo.neerc.pcms2.framework.Service;
+import pcms2.framework.Service;
 
 public interface LoginDataService
     extends Service
@@ -9,4 +9,4 @@ public interface LoginDataService
     public abstract LoginData getLoginData(String s, String s1)
         throws AuthorizationFailedException;
 }
-~                  
+

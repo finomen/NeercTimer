@@ -14,7 +14,7 @@ public class Timer implements Runnable{
 	@Override
 	public void run() {
 		final TimerFrame tf = new TimerFrame();
-		Pcms2 connection = new Pcms2("http://neerc.ifmo.ru:8081/pcms/party");
+		Pcms2 connection = new Pcms2("http://localhost:8080/pcms/party");
 		connection.hookLengthChange(new Callback<Long>() {
 			@Override
 			public void exec(Long arg) {

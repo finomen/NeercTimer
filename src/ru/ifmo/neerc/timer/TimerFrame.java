@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import ru.ifmo.neerc.gui.ImagePanel;
-import ru.ifmo.neerc.pcms2.services.site.Clock;
+import pcms2.services.site.Clock;
 
 public class TimerFrame extends JFrame {
 	public static final int BEFORE = 0;
@@ -32,6 +32,11 @@ public class TimerFrame extends JFrame {
 
 	TimerFrame() {
 		super("PCMS2 Timer");
+		palette = new Color[8];
+		for (int i = 0; i < 8; ++i)	{
+			palette[i] = Color.BLACK;
+		}
+		
 		this.setUndecorated(true);
 		setBounds(0, 0, 1024, 768);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

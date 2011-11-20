@@ -1,4 +1,4 @@
-package ru.ifmo.neerc.pcms2.services.client;
+package pcms2.services.client;
 
 import java.io.Serializable;
 
