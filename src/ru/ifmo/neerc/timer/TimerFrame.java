@@ -5,10 +5,10 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Toolkit;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
-import javax.sql.rowset.spi.SyncResolver;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -17,6 +17,7 @@ import pcms2.services.site.Clock;
 import ru.ifmo.neerc.gui.ImagePanel;
 
 
+@SuppressWarnings("serial")
 public class TimerFrame extends JFrame {
 	public static final int BEFORE = 0;
 	public static final int RUNNING = 1;
@@ -28,9 +29,42 @@ public class TimerFrame extends JFrame {
 	
 	private JLabel timeLabel = new JLabel();
 	private ImagePanel panelBgImg;
-	private Integer status;
-	private Long cTime, cDelta;
+	AtomicInteger status;
+	AtomicReference<SynchronizedTime> cTime; 
 	private Color[] palette;
+	
+	class SynchronizedTime {
+		private final long cTime, sync;
+		private long frozen, correction;
+		public SynchronizedTime(long time, boolean frozen) {
+			cTime = time;
+			sync = System.currentTimeMillis();
+			correction = 0;
+			if (frozen)
+				this.frozen = System.currentTimeMillis();
+		}
+		
+		public long get() {
+			if (frozen == 0) {
+				return Math.max(0, cTime + sync - System.currentTimeMillis() + correction);
+			} else {
+				return Math.max(0, cTime + sync - frozen + correction);
+			}
+		}
+		
+		public void freeze() {
+			if (frozen == 0) {
+				frozen = System.currentTimeMillis();
+			}
+		}
+		
+		public void resume() {
+			if (frozen != 0) {
+				correction += System.currentTimeMillis() - frozen;
+				frozen = 0;
+			}	
+		}
+	}
 
 	TimerFrame() {
 		super("PCMS2 Timer");
@@ -63,9 +97,8 @@ public class TimerFrame extends JFrame {
 		panelBgImg.setLayout(new BorderLayout());
 		panelBgImg.add(timeLabel, BorderLayout.CENTER);
 		panelBgImg.setBounds(0, 0, xSize, ySize);
-		cTime = Long.valueOf(0);
-		cDelta = Long.valueOf(0);
-		status = Integer.valueOf(0);
+		cTime = new AtomicReference<SynchronizedTime>();
+		cTime.set(new SynchronizedTime(0, true));
 		
 		new Thread(new Runnable() {
 			@Override
@@ -84,20 +117,7 @@ public class TimerFrame extends JFrame {
 					long nts = System.currentTimeMillis();
 					long diff = nts - timestamp;
 					timestamp = nts;
-					long dtime = 0;
-					synchronized (cDelta) {
-						synchronized (cTime) {
-							long correction = Math.min(cDelta, diff / 2);
-							synchronized (status) {
-								if (status == Clock.RUNNING) {
-									cTime = cTime - diff + correction;
-								}
-							}
-							
-							cDelta = cDelta - correction;
-							dtime = cTime;
-						}
-					}
+					long dtime = cTime.get().get();
 					
 					dtime /= 1000;
 					int seconds = (int) (dtime % 60);
@@ -110,8 +130,7 @@ public class TimerFrame extends JFrame {
 					
 					String text = null;
 					Color c = null;
-					synchronized (status) {
-						switch (status) {
+					switch (status.get()) {
 						case Clock.BEFORE:
 							c = palette[BEFORE];
 							break;
@@ -124,8 +143,8 @@ public class TimerFrame extends JFrame {
 						case Clock.PAUSED:
 							c = palette[PAUSED];
 							break;
-						}
 					}
+
 					
 					if (minutes <= 1) {
 						c = palette[LEFT1MIN];
@@ -159,21 +178,19 @@ public class TimerFrame extends JFrame {
 	
 	public void setStatus(int status) {
 		synchronized (this.status) {
-			this.status = Integer.valueOf(status);
+			this.status.set(status);
+			if (status != Clock.RUNNING) {
+				cTime.get().freeze();
+			} else {
+				cTime.get().resume();
+			}
+			
 			this.repaint();
 		}
 	}
 		
 	public void sync(long time) {
-		synchronized (this.cDelta) {
-			synchronized (this.cTime) {
-				cDelta = time - this.cTime;
-				if (cDelta >= 100000) {
-					cDelta = Long.valueOf(0);
-					this.cTime = time;
-				}
-				this.repaint();
-			}
-		}
+		cTime.set(new SynchronizedTime(time, status.get() != Clock.RUNNING));
+		this.repaint();
 	}
 }
