@@ -20,7 +20,7 @@ public class ImagePanel extends JPanel {
 			this.background = background;
 		}
 	}
-/*
+
 	public void paintComponent(Graphics g) {
 		Image img = null;
 		synchronized (this) {
@@ -34,5 +34,5 @@ public class ImagePanel extends JPanel {
 			g.drawImage(img, 0, 0, xSize, ySize, 0, 0, img.getWidth(this), img
 					.getHeight(this), this);
 		}
-	}*/
+	}
 }
