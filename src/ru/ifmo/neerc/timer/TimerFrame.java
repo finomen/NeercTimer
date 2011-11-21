@@ -75,7 +75,7 @@ public class TimerFrame extends TimerGUI {
 
 	@Override
 	protected void repaint() {
-		
+		timeLabel.repaint();
 	}
 
 	@Override

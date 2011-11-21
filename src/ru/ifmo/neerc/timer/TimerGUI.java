@@ -9,11 +9,11 @@ import pcms2.services.site.Clock;
 public abstract class TimerGUI{
 	public static final int BEFORE = 0;
 	public static final int RUNNING = 1;
-	public static final int FROZEN = 3;
-	public static final int PAUSED = 4;
-	public static final int LEFT5MIN = 5;
-	public static final int LEFT1MIN = 6;
-	public static final int OVER = 7;
+	public static final int FROZEN = 2;
+	public static final int PAUSED = 3;
+	public static final int LEFT5MIN = 4;
+	public static final int LEFT1MIN = 5;
+	public static final int OVER = 6;
 	
 	AtomicInteger status;
 	AtomicReference<SynchronizedTime> cTime; 
@@ -53,10 +53,14 @@ public abstract class TimerGUI{
 	}
 
 	TimerGUI() {
-		palette = new Color[8];
-		for (int i = 0; i < 8; ++i)	{
-			palette[i] = Color.BLACK;
-		}
+		palette = new Color[7];
+		palette[BEFORE] = Color.decode("0x00F0FF");
+		palette[RUNNING] = Color.green;
+		palette[FROZEN] = Color.green;
+		palette[LEFT5MIN] = Color.yellow;
+		palette[LEFT1MIN] = Color.red;
+		palette[OVER] = Color.red;
+		palette[PAUSED] = Color.black;
 		
 		setText("0:00:00", palette[BEFORE]);
 		
@@ -78,7 +82,7 @@ public abstract class TimerGUI{
 					int hours = (int) dtime;
 					
 					String text = null;
-					Color c = null;
+					Color c = palette[RUNNING];;
 					switch (status.get()) {
 						case Clock.BEFORE:
 							c = palette[BEFORE];
@@ -93,14 +97,15 @@ public abstract class TimerGUI{
 							c = palette[PAUSED];
 							break;
 					}
-				
-					if (minutes <= 1) {
-						c = palette[LEFT1MIN];
-					} else if (minutes <= 5) {
-						c = palette[LEFT5MIN];
-					} else if (hours == 0) {
-						c = palette[FROZEN];
-						setFrozen(true);
+					if (hours == 0) {
+						if (minutes <= 1) {
+							c = palette[LEFT1MIN];
+						} else if (minutes <= 5) {
+							c = palette[LEFT5MIN];
+						} else {
+							c = palette[FROZEN];
+							setFrozen(true);
+						}
 					} else {
 						setFrozen(false);
 					}
@@ -110,7 +115,11 @@ public abstract class TimerGUI{
 					} else if (minutes > 0) {						 
 						text = String.format("%02d:%02d", minutes, seconds);
 					} else {
-						text = String.format("%d", seconds);
+						if (seconds > 0) {
+							text = String.format("%d", seconds);
+						} else {
+							text = "OVER";
+						}
 					}
 					
 					setText(text, c);
@@ -148,6 +157,6 @@ public abstract class TimerGUI{
 		
 	public void sync(long time) {
 		cTime.set(new SynchronizedTime(time, status.get() != Clock.RUNNING));
-		this.repaint();
+		repaint();
 	}
 }
