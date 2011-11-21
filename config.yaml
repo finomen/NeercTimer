@@ -1,0 +1,13 @@
+--- 
+colorScheme: 
+  before: 0x00F0FF
+  running: 0x00FF00
+  frozen: 0x00FF00
+  left5min: 0xFFFF00
+  left1min: 0xFF0000
+  over: 0xFF0000
+  paused: 0x000000
+host: http://localhost:8080/pcms/party
+syncInterval: 1000
+login: guest
+password: guest
