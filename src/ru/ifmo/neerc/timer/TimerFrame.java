@@ -21,6 +21,7 @@ public class TimerFrame extends TimerGUI {
 	private JLabel timeLabel = new JLabel();
 	private ImagePanel panelBgImg;
 	private boolean frozen = false;
+
 	class TimerJFrame extends JFrame {
 		TimerJFrame() {
 			super("PCMS2 Timer");
@@ -58,7 +59,7 @@ public class TimerFrame extends TimerGUI {
 			setFrozen(false);
 			setFrozen(true);
 			setFrozen(f);
-			
+
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
@@ -68,7 +69,7 @@ public class TimerFrame extends TimerGUI {
 			}).start();
 		}
 	}
-	
+
 	TimerFrame() {
 		new TimerJFrame();
 	}
@@ -80,9 +81,17 @@ public class TimerFrame extends TimerGUI {
 
 	@Override
 	protected void setText(String text, Color c) {
-		Font f = new Font("Calibri", Font.BOLD, 200);
-		
+		int fsize = 1000;
+		Font f = new Font("Calibri", Font.BOLD, fsize);
+
 		if (timeLabel != null) {
+			while (timeLabel.getFontMetrics(f).stringWidth(text) > timeLabel
+					.getWidth() - 20
+					|| timeLabel.getFontMetrics(f).getHeight() > timeLabel
+							.getHeight()) {
+				fsize -= 5;
+				f = new Font("Calibri", Font.BOLD, fsize);
+			}
 			timeLabel.setFont(f);
 			timeLabel.setText(text);
 			timeLabel.setForeground(c);
@@ -94,14 +103,16 @@ public class TimerFrame extends TimerGUI {
 		if (frozen == b) {
 			return;
 		}
-		
+
 		frozen = b;
-		
+
 		if (panelBgImg != null) {
 			if (frozen) {
-				panelBgImg.setBackground(new ImageIcon("frozen.jpg").getImage());
+				panelBgImg
+						.setBackground(new ImageIcon("frozen.jpg").getImage());
 			} else {
-				panelBgImg.setBackground(new ImageIcon("background.jpg").getImage());
+				panelBgImg.setBackground(new ImageIcon("background.jpg")
+						.getImage());
 			}
 		}
 	}
