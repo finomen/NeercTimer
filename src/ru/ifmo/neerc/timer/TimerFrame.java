@@ -80,7 +80,10 @@ public class TimerFrame extends TimerGUI {
 
 	@Override
 	protected void setText(String text, Color c) {
+		Font f = new Font("Calibri", Font.BOLD, 200);
+		
 		if (timeLabel != null) {
+			timeLabel.setFont(f);
 			timeLabel.setText(text);
 			timeLabel.setForeground(c);
 		}
