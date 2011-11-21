@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import pcms2.services.site.Clock;
+import ru.ifmo.neerc.framework.Settings;
 
 public abstract class TimerGUI{
 	public static final int BEFORE = 0;
@@ -54,13 +55,13 @@ public abstract class TimerGUI{
 
 	TimerGUI() {
 		palette = new Color[7];
-		palette[BEFORE] = Color.decode("0x00F0FF");
-		palette[RUNNING] = Color.green;
-		palette[FROZEN] = Color.green;
-		palette[LEFT5MIN] = Color.yellow;
-		palette[LEFT1MIN] = Color.red;
-		palette[OVER] = Color.red;
-		palette[PAUSED] = Color.black;
+		palette[BEFORE] = Color.decode(Settings.instance().colorScheme.get("before"));
+		palette[RUNNING] = Color.decode(Settings.instance().colorScheme.get("running"));
+		palette[FROZEN] = Color.decode(Settings.instance().colorScheme.get("frozen"));
+		palette[LEFT5MIN] = Color.decode(Settings.instance().colorScheme.get("left5min"));
+		palette[LEFT1MIN] = Color.decode(Settings.instance().colorScheme.get("left1min"));
+		palette[OVER] = Color.decode(Settings.instance().colorScheme.get("over"));
+		palette[PAUSED] = Color.decode(Settings.instance().colorScheme.get("paused"));
 		
 		setText("0:00:00", palette[BEFORE]);
 		

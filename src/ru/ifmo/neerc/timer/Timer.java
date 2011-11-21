@@ -1,22 +1,28 @@
 package ru.ifmo.neerc.timer;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+
+import org.ho.yaml.Yaml;
+
 import ru.ifmo.neerc.connectors.Pcms2;
 import ru.ifmo.neerc.framework.Callback;
+import ru.ifmo.neerc.framework.Settings;
 
 
 
-public class Timer implements Runnable{
+public class Timer {
 	private long length, time;
 	
-	
 	public static void main(String[] args) {		
-		new Timer().run();
+		new Timer().run(args);
 	}
 
-	@Override
-	public void run() {
+	public void run(String[] args) {
 		final TimerFrame tf = new TimerFrame();
-		Pcms2 connection = new Pcms2("http://localhost:8080/pcms/party");
+		
+		Pcms2 connection = new Pcms2(Settings.instance().host);
 		connection.hookLengthChange(new Callback<Long>() {
 			@Override
 			public void exec(Long arg) {
@@ -37,5 +43,5 @@ public class Timer implements Runnable{
 				tf.setStatus(arg);
 			}
 		});
-	}
+	}	
 } 

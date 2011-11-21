@@ -10,6 +10,7 @@ import pcms2.services.site.Clock;
 import com.caucho.hessian.client.HessianProxyFactory;
 
 import ru.ifmo.neerc.framework.Callback;
+import ru.ifmo.neerc.framework.Settings;
 import ru.ifmo.neerc.framework.Watch;
 
 
@@ -57,11 +58,11 @@ public class Pcms2 {
 	}
 
 	public Pcms2(String host) {
-		this(host, "guest", "guest");
+		this(host, Settings.instance().login, Settings.instance().password);
 	}
 	
 	public Pcms2(String host, String login, String password) {
-		this(host, login, password, 1000);
+		this(host, login, password, Settings.instance().syncInterval);
 	}
 	
 	public Pcms2(String host, String login, String password, int updateInterval) {
