@@ -45,6 +45,8 @@ public class Pcms2 {
 					e.printStackTrace();
 				} catch (AuthorizationFailedException e) {
 					e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 				
 				try {

@@ -23,25 +23,29 @@ public class Timer {
 		final TimerFrame tf = new TimerFrame();
 		
 		Pcms2 connection = new Pcms2(Settings.instance().host);
-		connection.hookLengthChange(new Callback<Long>() {
-			@Override
-			public void exec(Long arg) {
-				length = arg;
-				tf.sync(length - time);
-			}
-		});
-		connection.hookTimeChange(new Callback<Long>() {
-			@Override
-			public void exec(Long arg) {
-				time = arg;
-				tf.sync(length - time);
-			}
-		});
-		connection.hookStatusChange(new Callback<Integer>() {
-			@Override
-			public void exec(Integer arg) {
-				tf.setStatus(arg);
-			}
-		});
+		if (args.length == 1) {
+			tf.sync(Integer.parseInt(args[0]));
+		} else {
+			connection.hookLengthChange(new Callback<Long>() {
+				@Override
+				public void exec(Long arg) {
+					length = arg;
+					tf.sync(length - time);
+				}
+			});
+			connection.hookTimeChange(new Callback<Long>() {
+				@Override
+				public void exec(Long arg) {
+					time = arg;
+					tf.sync(length - time);
+				}
+			});
+			connection.hookStatusChange(new Callback<Integer>() {
+				@Override
+				public void exec(Integer arg) {
+					tf.setStatus(arg);
+				}
+			});
+		}
 	}	
 } 

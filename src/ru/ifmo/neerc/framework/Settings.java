@@ -13,11 +13,11 @@ public class Settings {
 	public String password;
 	public Map<String, String> colorScheme;
 	public int syncInterval;
-	
+	public static String file = "config.yaml";
 	public static Settings instance() {
 		if (instance == null) {
 			try {
-				instance = Yaml.loadType(new File("config.yaml"), Settings.class);
+				instance = Yaml.loadType(new File(file), Settings.class);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			};
