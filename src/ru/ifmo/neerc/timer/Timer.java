@@ -23,8 +23,8 @@ public class Timer {
 		final TimerFrame tf = new TimerFrame();
 		
 		if (args.length == 2) {
-			tf.setStatus(Integer.parseInt(args[0]));
 			tf.sync(Integer.parseInt(args[1]));
+			tf.setStatus(Integer.parseInt(args[0]));
 		} else {
 			Pcms2 connection = new Pcms2(Settings.instance().host);
 			connection.hookLengthChange(new Callback<Long>() {
