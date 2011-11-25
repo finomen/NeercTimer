@@ -28,6 +28,7 @@ public class Pcms2 {
 		@Override
 		public void run() {
 			HessianProxyFactory factory = new HessianProxyFactory();
+			factory.setConnectTimeout(2000);
 			while (true) {
 				try {
 					LoginDataService ldsvc = (LoginDataService) factory.create(
