@@ -48,8 +48,6 @@ public class TimerFrame extends TimerGUI {
 			panelBgImg.setLayout(new BorderLayout());
 			panelBgImg.add(timeLabel, BorderLayout.CENTER);
 			panelBgImg.setBounds(0, 0, xSize, ySize);
-			cTime = new AtomicReference<SynchronizedTime>();
-			cTime.set(new SynchronizedTime(0, true));
 			status = new AtomicInteger(Clock.BEFORE);
 
 			// Do some magic

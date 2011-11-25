@@ -148,12 +148,15 @@ public abstract class TimerGUI{
 	public void setStatus(int status) {
 		synchronized (this.status) {
 			this.status.set(status);
-			if (status != Clock.RUNNING) {
-				cTime.get().freeze();
-			} else {
-				cTime.get().resume();
+			SynchronizedTime st = cTime.get();
+			if (st != null)
+			{
+				if (status != Clock.RUNNING) {
+					st.freeze();
+				} else {
+					st.resume();
+				}
 			}
-			
 			repaint();
 		}
 	}
