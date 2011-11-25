@@ -63,7 +63,7 @@ public abstract class TimerGUI{
 		palette[OVER] = Color.decode(Settings.instance().colorScheme.get("over"));
 		palette[PAUSED] = Color.decode(Settings.instance().colorScheme.get("paused"));
 		
-		setText("0:00:00", palette[BEFORE]);
+		/*setText("0:00:00", palette[BEFORE]);*/
 		
 		cTime = new AtomicReference<SynchronizedTime>();
 		cTime.set(new SynchronizedTime(0, true));
@@ -99,13 +99,13 @@ public abstract class TimerGUI{
 							break;
 					}
 					if (hours == 0) {
+						c = palette[FROZEN];
+						setFrozen(true);
+						
 						if (minutes < 1) {
 							c = palette[LEFT1MIN];
 						} else if (minutes < 5) {
 							c = palette[LEFT5MIN];
-						} else {
-							c = palette[FROZEN];
-							setFrozen(true);
 						}
 					} else {
 						setFrozen(false);

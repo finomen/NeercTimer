@@ -36,8 +36,6 @@ public class TimerFrame extends TimerGUI {
 			timeLabel.setForeground(Color.green);
 			con.setBackground(Color.BLACK);
 
-			timeLabel.setText("0:00:00");
-
 			Toolkit tk = Toolkit.getDefaultToolkit();
 			int xSize = ((int) tk.getScreenSize().getWidth());
 			int ySize = ((int) tk.getScreenSize().getHeight());
