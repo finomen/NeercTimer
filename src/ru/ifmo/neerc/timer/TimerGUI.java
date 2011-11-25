@@ -63,68 +63,70 @@ public abstract class TimerGUI{
 		palette[OVER] = Color.decode(Settings.instance().colorScheme.get("over"));
 		palette[PAUSED] = Color.decode(Settings.instance().colorScheme.get("paused"));
 		
-		/*setText("0:00:00", palette[BEFORE]);*/
 		
 		cTime = new AtomicReference<SynchronizedTime>();
-		cTime.set(new SynchronizedTime(0, true));
+		cTime.set(null);
 		status = new AtomicInteger(Clock.BEFORE);
 		
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				while (true) {
-					long dtime = cTime.get().get();
-					
-					dtime /= 1000;
-					int seconds = (int) (dtime % 60);
-					dtime /= 60;
-					int minutes = (int) (dtime % 60);
-					dtime /= 60;
-					int hours = (int) dtime;
-					
-					String text = null;
-					Color c = palette[RUNNING];;
-					switch (status.get()) {
-						case Clock.BEFORE:
-							c = palette[BEFORE];
-							break;
-						case Clock.RUNNING:
-							c = palette[RUNNING];
-							break;
-						case Clock.OVER:
-							c = palette[OVER];
-							break;
-						case Clock.PAUSED:
-							c = palette[PAUSED];
-							break;
-					}
-					if (hours == 0) {
-						c = palette[FROZEN];
-						setFrozen(true);
+					SynchronizedTime st = cTime.get();
+					if (st != null)
+					{
+						long dtime = st.get();
 						
-						if (minutes < 1) {
-							c = palette[LEFT1MIN];
-						} else if (minutes < 5) {
-							c = palette[LEFT5MIN];
+						dtime /= 1000;
+						int seconds = (int) (dtime % 60);
+						dtime /= 60;
+						int minutes = (int) (dtime % 60);
+						dtime /= 60;
+						int hours = (int) dtime;
+						
+						String text = null;
+						Color c = palette[RUNNING];;
+						switch (status.get()) {
+							case Clock.BEFORE:
+								c = palette[BEFORE];
+								break;
+							case Clock.RUNNING:
+								c = palette[RUNNING];
+								break;
+							case Clock.OVER:
+								c = palette[OVER];
+								break;
+							case Clock.PAUSED:
+								c = palette[PAUSED];
+								break;
 						}
-					} else {
-						setFrozen(false);
-					}
-					
-					if (hours > 0) {
-						text = String.format("%d:%02d:%02d", hours, minutes, seconds);
-					} else if (minutes > 0) {						 
-						text = String.format("%02d:%02d", minutes, seconds);
-					} else {
-						if (seconds > 0) {
-							text = String.format("%d", seconds);
+						if (hours == 0) {
+							c = palette[FROZEN];
+							setFrozen(true);
+							
+							if (minutes < 1) {
+								c = palette[LEFT1MIN];
+							} else if (minutes < 5) {
+								c = palette[LEFT5MIN];
+							}
 						} else {
-							text = "OVER";
+							setFrozen(false);
 						}
+						
+						if (hours > 0) {
+							text = String.format("%d:%02d:%02d", hours, minutes, seconds);
+						} else if (minutes > 0) {						 
+							text = String.format("%02d:%02d", minutes, seconds);
+						} else {
+							if (seconds > 0) {
+								text = String.format("%d", seconds);
+							} else {
+								text = "OVER";
+							}
+						}
+						
+						setText(text, c);
 					}
-					
-					setText(text, c);
-					
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
