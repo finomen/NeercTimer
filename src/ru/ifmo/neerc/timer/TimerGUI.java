@@ -99,9 +99,9 @@ public abstract class TimerGUI{
 							break;
 					}
 					if (hours == 0) {
-						if (minutes <= 1) {
+						if (minutes < 1) {
 							c = palette[LEFT1MIN];
-						} else if (minutes <= 5) {
+						} else if (minutes < 5) {
 							c = palette[LEFT5MIN];
 						} else {
 							c = palette[FROZEN];
