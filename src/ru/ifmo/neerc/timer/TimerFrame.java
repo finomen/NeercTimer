@@ -21,7 +21,7 @@ public class TimerFrame extends TimerGUI {
 	private JLabel timeLabel = new JLabel();
 	private ImagePanel panelBgImg;
 	private boolean frozen = false;
-
+	private JFrame frame;
 	class TimerJFrame extends JFrame {
 		TimerJFrame() {
 			super("PCMS2 Timer");
@@ -71,7 +71,7 @@ public class TimerFrame extends TimerGUI {
 	}
 
 	TimerFrame() {
-		new TimerJFrame();
+		frame = new TimerJFrame();
 	}
 
 	@Override
@@ -95,7 +95,9 @@ public class TimerFrame extends TimerGUI {
 			timeLabel.setFont(f);
 			timeLabel.setText(text);
 			timeLabel.setForeground(c);
+			frame.repaint();
 		}
+		
 	}
 
 	@Override
