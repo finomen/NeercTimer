@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -22,6 +23,9 @@ public class TimerFrame extends TimerGUI {
 	private ImagePanel panelBgImg;
 	private boolean frozen = false;
 	private JFrame frame;
+	AtomicReference<String> text;
+	AtomicReference<Color> color;
+	
 	class TimerJFrame extends JFrame {
 		TimerJFrame() {
 			super("PCMS2 Timer");
@@ -56,13 +60,39 @@ public class TimerFrame extends TimerGUI {
 			setFrozen(true);
 			setFrozen(f);
 
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					TimerJFrame.this.setVisible(true);
+			text = new AtomicReference<String>();
+			color = new AtomicReference<Color>();
+			
+			TimerJFrame.this.setVisible(true);
+		}
+		
+		@Override
+		public void paint(Graphics g) {
+			Color c = color.get();
+			String t = text.get();
+			if (c != null && t != null) {
+				int fsize = 1000;
+				Font f = new Font("Calibri", Font.BOLD, fsize);
+	
+				if (timeLabel != null) {
+					while (timeLabel.getFontMetrics(f).stringWidth(t) > timeLabel
+							.getWidth() - 20
+							|| timeLabel.getFontMetrics(f).getHeight() > timeLabel
+									.getHeight()) {
+						fsize -= 5;
+						f = new Font("Calibri", Font.BOLD, fsize);
+					}
+					
+					timeLabel.setFont(f);
+					timeLabel.setText(t);
+					timeLabel.setForeground(c);
+					frame.repaint();
 				}
-
-			}).start();
+				
+				color.compareAndSet(c, null);
+				text.compareAndSet(t, null);
+			}			
+			super.paint(g);
 		}
 	}
 
@@ -76,24 +106,11 @@ public class TimerFrame extends TimerGUI {
 	}
 
 	@Override
-	protected void setText(String text, Color c) {
-		int fsize = 1000;
-		Font f = new Font("Calibri", Font.BOLD, fsize);
-
-		if (timeLabel != null) {
-			while (timeLabel.getFontMetrics(f).stringWidth(text) > timeLabel
-					.getWidth() - 20
-					|| timeLabel.getFontMetrics(f).getHeight() > timeLabel
-							.getHeight()) {
-				fsize -= 5;
-				f = new Font("Calibri", Font.BOLD, fsize);
-			}
-			timeLabel.setFont(f);
-			timeLabel.setText(text);
-			timeLabel.setForeground(c);
-			frame.repaint();
-		}
-		
+	protected void setText(String t, Color c) {
+		System.out.println("Set " + t + c);
+		this.text.set(t);
+		this.color.set(c);
+		frame.repaint();
 	}
 
 	@Override
