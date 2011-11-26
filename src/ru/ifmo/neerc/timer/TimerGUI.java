@@ -76,7 +76,7 @@ public abstract class TimerGUI{
 					if (st != null)
 					{
 						long dtime = st.get();
-						if (dtime < 0) {
+						if (dtime == 0) {
 							status.set(Clock.OVER);
 						}
 						
@@ -116,10 +116,10 @@ public abstract class TimerGUI{
 							setFrozen(false);
 						}
 						
-						if (minutes > 0) {
+						if (minutes > 0 || hours > 0) {
 							text = String.format("%d:%02d", hours, minutes);
 						} else {
-							if (status.get() == Clock.OVER) {
+							if (status.get() != Clock.OVER) {
 								text = String.format("%d", seconds);
 							} else {
 								text = "OVER";

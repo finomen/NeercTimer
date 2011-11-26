@@ -107,7 +107,6 @@ public class TimerFrame extends TimerGUI {
 
 	@Override
 	protected void setText(String t, Color c) {
-		System.out.println("Set " + t + c);
 		this.text.set(t);
 		this.color.set(c);
 		frame.repaint();
