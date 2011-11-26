@@ -116,13 +116,27 @@ public abstract class TimerGUI{
 							setFrozen(false);
 						}
 						
-						if (minutes > 0 || hours > 0) {
-							text = String.format("%d:%02d", hours, minutes);
-						} else {
-							if (status.get() != Clock.OVER) {
-								text = String.format("%d", seconds);
+						if (Settings.instance().shortTime) {
+							if (minutes > 0 || hours > 0) {
+								text = String.format("%d:%02d", hours, minutes);
 							} else {
-								text = "OVER";
+								if (status.get() != Clock.OVER) {
+									text = String.format("%d", seconds);
+								} else {
+									text = "OVER";
+								}
+							}
+						} else {
+							if (hours > 0) {
+								text = String.format("%d:%02d:%02d", hours, minutes, seconds);
+							} else if (minutes > 0) {
+								text = String.format("%02d:%02d", minutes, seconds);
+							} else {
+								if (status.get() != Clock.OVER) {
+									text = String.format("%d", seconds);
+								} else {
+									text = "OVER";
+								}
 							}
 						}
 						

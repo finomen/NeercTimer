@@ -13,6 +13,7 @@ public class Settings {
 	public String password;
 	public Map<String, String> colorScheme;
 	public int syncInterval;
+	public boolean shortTime = true;
 	public static String file = "config.yaml";
 	public static Settings instance() {
 		if (instance == null) {
